@@ -113,7 +113,7 @@ void loop() {
 
       if (running) {
         float speed = gps.f_speed_kmph();
-        current_lap_time = milis();
+        current_lap_time = millis();
         Serial.print("Velocidad(kmph): ");
         Serial.println(speed);
 
@@ -121,7 +121,7 @@ void loop() {
           float current_best_distance = square_distance_between_coordinates(current_latitude, start_latitude, current_longitude, start_longitude);
           if (best_distance == 0 || current_best_distance <= best_distance) {  // ? Could use FLT_MAX to initialize best distance
             best_distance = current_best_distance;
-            stop_time = current_laptime;
+            stop_time = current_lap_time;
           }
           gps.f_get_position(&current_latitude, &current_longitude);
         }
