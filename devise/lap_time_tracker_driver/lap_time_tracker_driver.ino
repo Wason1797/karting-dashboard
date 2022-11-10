@@ -38,16 +38,16 @@ bool is_in_elipse(float latitude, float longitude) {
 }
 
 void start_stopwatch() {
-  start_lap_time = milis();
+  start_lap_time = millis();
 }
 
 void stop_stopwatch() {
- stop_time = milis();
+ stop_time = millis();
 }
 
 void reset_stopwatch() {
  start_lap_time = 0;
- stop_time = milis();
+ stop_time = millis();
 }
 
 
@@ -117,7 +117,7 @@ void loop() {
         Serial.print("Velocidad(kmph): ");
         Serial.println(speed);
 
-        while (is_in_elipse(current_latitude, current_longitude) && current_laptime >= MIN_LAP_TIME) {
+        while (is_in_elipse(current_latitude, current_longitude) && current_lap_time >= MIN_LAP_TIME) {
           float current_best_distance = square_distance_between_coordinates(current_latitude, start_latitude, current_longitude, start_longitude);
           if (best_distance == 0 || current_best_distance <= best_distance) {  // ? Could use FLT_MAX to initialize best distance
             best_distance = current_best_distance;
