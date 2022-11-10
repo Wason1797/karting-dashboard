@@ -18,7 +18,8 @@ float closest_lat_to_start = 0;
 float closest_long_to_start = 0;
 float start_latitude, start_longitude;
 bool running = false;
-float current_time = 0;
+float start_lap_time = 0;
+float current_lap_time = 0;
 float MIN_LAP_TIME = 25;  // TODO Define this correctly
 float best_distance = 0;
 float stop_time = 0;
@@ -33,19 +34,20 @@ float square_distance_between_coordinates(float start_lat, float start_long, flo
 }
 
 bool is_in_elipse(float latitude, float longitude) {
-  return false  //TODO implement
+  return false;  //TODO implement
 }
 
 void start_stopwatch() {
-  //TODO implement
+  start_lap_time = milis();
 }
 
 void stop_stopwatch() {
-  //TODO implement
+ stop_time = milis();
 }
 
 void reset_stopwatch() {
-  //TODO implement
+ start_lap_time = 0;
+ stop_time = milis();
 }
 
 
@@ -110,12 +112,14 @@ void loop() {
       }
 
       if (running) {
-        float speed = gps.f_speed_kmph()
-                        Serial.print("Velocidad(kmph): ");
+        float speed = gps.f_speed_kmph();
+        current_lap_time = milis();
+        Serial.print("Velocidad(kmph): ");
         Serial.println(speed);
 
         while (is_in_elipse(current_latitude, current_longitude) && current_laptime >= MIN_LAP_TIME) {
-          float current_best_distance = square_distance_between_coordinates(current_latitude, start_latitude, current_longitude, start_longitude) if (best_distance == 0 || current_best_distance <= best_distance) {  // ? Could use FLT_MAX to initialize best distance
+          float current_best_distance = square_distance_between_coordinates(current_latitude, start_latitude, current_longitude, start_longitude);
+          if (best_distance == 0 || current_best_distance <= best_distance) {  // ? Could use FLT_MAX to initialize best distance
             best_distance = current_best_distance;
             stop_time = current_laptime;
           }
