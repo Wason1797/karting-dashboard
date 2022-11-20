@@ -79,10 +79,19 @@ class CoordinateMath {
 private:
   double rotation_angle = 0;
   Point starting_point{ 0, 0 };
+  Point origin = {0, 0};
   Point reference_point = { 0, 0 };
+
+  Point rectangle_top_left = {0, 0};
+  Point rectangle_bottom_right = {0, 0};
 
   double sin_factor = 0;
   double cos_factor = 0;
+
+  double rectangle_half_width = 3; //meters
+  double rectangle_half_height = 3; //meters
+
+  double earth_radious = 6378137;
 
 
 public:
@@ -118,6 +127,25 @@ public:
     };
   }
 
+  double to_radians(double deg){
+    return deg * PI/180;
+  }
+
+  double to_deg(double radian){
+    return radian * 180/PI;
+  }
+
+  Point offset_by_meters(Point position, double x_meters = 0, double y_meters = 0) {
+    double y_offset = y_meters / earth_radious;
+    double x_offset = x_meters / (earth_radious*cos(to_radians(position.x)));
+    return Point {position.x + to_deg(x_offset), position.y + to_deg(y_offset)};
+  }
+
+  void set_starting_square() {
+   // test the math
+
+  }
+
 };
 
 
@@ -136,6 +164,7 @@ bool start_pressed() {
 
 Stopwatch stopwatch;
 CoordinateMath coordinate_math;
+float current_speed = 0;
 
 void setup() {
   stopwatch = Stopwatch();
@@ -167,13 +196,15 @@ void loop() {
           delay(1000);
           gps.f_get_position(&current_latitude, &current_longitude);
           coordinate_math.set_reference_point(current_latitude, current_longitude);
+          coordinate_math.calculate_rotation_factors();
           stopwatch.start();
         }
-
-
       }
+
       if (running) {
-        float speed = gps.f_speed_kmph();
+        current_speed = gps.f_speed_kmph();
+
+        
       }
     }
   }
