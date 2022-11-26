@@ -2,8 +2,9 @@ import math as mt
 from functools import lru_cache
 
 import matplotlib.pyplot as plt
+from matplotlib.patches import Polygon
 import numpy as np
-
+import pprint
 
 @lru_cache
 def cached_cos(angle: float) -> float:
@@ -35,6 +36,9 @@ class Point:
             cached_cos(angle) * self.y + cached_sin(angle)*self.x,
         )
 
+    def __repr__(self) -> str:
+        return f"{self.x}, {self.y}"
+
 
 def translate(point:Point, origin: Point) -> Point:
     return point - origin
@@ -51,13 +55,20 @@ angle_point = translated_coordinates[1]
 
 theta =  mt.atan2(angle_point.x, angle_point.y)
 
+print(f"theta, {theta}")
+print(f"cosine, {cached_cos(theta)}")
+print(f"sine, {cached_sin(theta)}")
 
 rotated_coordinates = [coord.rotate(theta) for coord in translated_coordinates[1::]]
 
-
+# pprint.pprint(rotated_coordinates)
 
 xpoints = np.array([0]+ [coord.x*100 for coord in rotated_coordinates])
 ypoints = np.array([0]+ [coord.y*100 for coord in rotated_coordinates])
+
+rectangle = [(0.0000269496, 0.0000179663), (0.0000269496, -0.0000179663), (-0.0000269496, -0.0000179663), (-0.0000269496, 0.0000179663)]
+
+scaled_ractangle = [(x*100, y*100) for x, y in rectangle]
 
 if __name__ == '__main__':
     ax = plt.gca()
@@ -65,7 +76,34 @@ if __name__ == '__main__':
     ax.spines['left'].set_position('zero')
     ax.spines['right'].set_color('none')
     ax.spines['bottom'].set_position('zero')
+    ax.add_patch(Polygon(scaled_ractangle, linewidth=1, edgecolor='r', facecolor='none'))
     plt.plot(xpoints, ypoints)
     plt.grid(True)
     plt.show()
 
+
+
+
+# Sin Factor
+# -0.93
+# Cos Factor
+# 0.36
+#x/y: 156.78086, -78.10077
+
+
+# Angle Factor
+# -1.20645
+
+# Rectangle top right
+# 0.0001125202, 0.0000089832
+# Rectangle bottom_left
+# -0.0001125202, -0.0000089832
+
+
+
+
+
+# # Rectangle top right
+# 0.0000269496, 0.0000179663
+# Rectangle bottom_left
+# -0.0000269496, -0.0000179663
